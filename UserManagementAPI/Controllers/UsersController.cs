@@ -51,43 +51,36 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-
     public ActionResult<User> Post([FromBody] User user)
-
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
         user.Id = _nextId++;
-
         _users.Add(user);
-
         return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
-
     }
 
     [HttpPut("{id}")]
-
     public IActionResult Put(int id, [FromBody] User user)
-
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
         var existingUser = _users.FirstOrDefault(u => u.Id == id);
-
         if (existingUser == null)
-
         {
-
             return NotFound();
-
         }
 
         existingUser.Name = user.Name;
-
         existingUser.Email = user.Email;
-
         existingUser.Department = user.Department;
-
         return NoContent();
-
     }
 
     [HttpDelete("{id}")]
